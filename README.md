@@ -6,4 +6,4 @@ An Alfred app workflow to display battery information of your Apple laptop batte
 
 Keyword is `battery`.
 
-[Download](Battery.alfredworkflow)
+[Download](https://github.com/BenziAhamed/alfred-battery/raw/master/Battery.alfredworkflow)
