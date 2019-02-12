@@ -30,6 +30,8 @@ else
             TIME_INFO="On AC power"
             STATUS_INFO="Fully Charged"
             BATT_ICON=power.png
+            CHARGE="100"
+            CELLS="●●●●●●●●●●"
         else
             TIME_INFO=$TIME_LEFT
             BATT_ICON=full.png
