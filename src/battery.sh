@@ -56,7 +56,8 @@ TEMPERATURE=$(echo "$INFO" | grep Temperature | awk '{printf ("%.1f", $3/10-273)
 CYCLE_COUNT=$(echo "$INFO" | grep -e '"CycleCount" =' | awk '{printf ("%i", $3)}')
 
 # Battery health
-DESIGN_CAPACITY=$(echo "$INFO" | grep DesignCapacity | awk '{printf $3; exit}')
+# ref: https://github.com/BenziAhamed/alfred-battery/issues/10#issuecomment-745541202
+DESIGN_CAPACITY=$(echo "$INFO" | grep DesignCapacity | awk '{printf ("%.i", $3)}')
 HEALTH=$((MAX_CAPACITY * 100 / DESIGN_CAPACITY))
 
 if [ "$HEALTH" -gt 100 ]; then
