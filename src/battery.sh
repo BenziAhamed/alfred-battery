@@ -1,4 +1,7 @@
+#1/usr/bin/env bash
+
 ioreg -l -n AppleSmartBattery -r > info.txt
+
 RAW_CURRENT_CAPACITY=$(cat info.txt | grep -e \"AppleRawCurrentCapacity\" | awk '{printf ("%i", $3)}')
 RAW_MAX_CAPACITY=$(cat info.txt | grep -e \"AppleRawMaxCapacity\" | awk '{printf ("%i", $3)}')
 # MAX_CAPACITY=$(cat info.txt | grep -e \"MaxCapacity\" | | awk -F',' '{printf ("%s", $45)}' | awk -F'=' '{printf      ("%i", $2)}')
@@ -68,34 +71,34 @@ AGE=$(python3 -c "from datetime import date as D; d1=D.today(); d2=D($year, $mon
 
 TRACKPAD_ICON="gradient-icons/trackpad.png"
 # trackpad
-TrackpadPercent=`ioreg -c AppleDeviceManagementHIDEventService | grep 'Magic Trackpad' -A8 | grep BatteryPercent | sed 's/[a-z,A-Z, ,|,\",=]//g' | tail -1 | awk '{print $1}'`
+TrackpadPercent=`ioreg -c AppleDeviceManagementHIDEventService | grep -se \"Magic Trackpad\" -A8 | grep -se \"BatteryPercent\" | sed 's/[a-z,A-Z, ,|,\",=]//g' | tail -1 | awk '{print $1}'`
 if [ ${#TrackpadPercent} = 0 ]
 then
 	TrackpadTitle="Not connected"
 else
-	TrackpadSlug=$(python -c "f='●'*($TrackpadPercent/10) + '○'*(10-$TrackpadPercent/10);print f")
+	TrackpadSlug=$(python -c "f='●'*(int($TrackpadPercent/10)) + '○'*(int(10-$TrackpadPercent/10));print(f)")
 	TrackpadTitle="$TrackpadPercent% $TrackpadSlug"
 fi
 
 MOUSE_ICON="gradient-icons/mouse.png"
 # mouse
-MousePercent=`ioreg -c AppleDeviceManagementHIDEventService | grep \"Magic Mouse\" -A8 | grep BatteryPercent | sed 's/[a-z,A-Z, ,|,\",=]//g' | tail -1 | awk '{print $1}'`
+MousePercent=`ioreg -c AppleDeviceManagementHIDEventService | grep -se \"Magic Mouse\" -A8 | grep -se \"BatteryPercent\" | sed 's/[a-z,A-Z, ,|,\",=]//g' | tail -1 | awk '{print $1}'`
 if [ ${#MousePercent} = 0 ]
 then
 	MouseTitle="Not connected"
 else
-	MouseSlug=$(python -c "f='●'*($MousePercent/10) + '○'*(10-$MousePercent/10);print f")
+	MouseSlug=$(python -c "f='●'*(int($MousePercent/10)) + '○'*(int(10-$MousePercent/10));print(f)")
 	MouseTitle="$MousePercent% $MouseSlug"
 fi
 
 KEYBOARD_ICON="gradient-icons/keyboard.png"
 # keyboard
-KeyboardPercent=`ioreg -c AppleDeviceManagementHIDEventService | grep -e \"Magic Keyboard\" -A8 | grep BatteryPercent | sed 's/[a-z,A-Z, ,|,\",=]//g' | tail -1 | awk '{print $1}'`
+KeyboardPercent=`ioreg -c AppleDeviceManagementHIDEventService | grep -se \"Magic Keyboard\" -A8 | grep -se \"BatteryPercent\" | sed 's/[a-z,A-Z, ,|,\",=]//g' | tail -1 | awk '{print $1}'`
 if [ ${#KeyboardPercent} = 0 ]
 then
 	KeyboardTitle="Not connected"
 else
-	KeyboardSlug=$(python -c "f='●'*($KeyboardPercent/10) + '○'*(10-$KeyboardPercent/10);print f")
+	KeyboardSlug=$(python -c "f='●'*(int($KeyboardPercent/10)) + '○'*(int(10-$KeyboardPercent/10));print(f)")
 	KeyboardTitle="$KeyboardPercent% $KeyboardSlug"
 fi
 
@@ -144,13 +147,13 @@ cat << EOB
   </item>
   <item>
     <title>$SERIAL</title>
-	  <subtitle>Serial</subtitle>
-	  <icon>gradient-icons/serial.png</icon>
+	<subtitle>Serial</subtitle>
+	<icon>gradient-icons/serial.png</icon>
   </item>
   <item>
     <title>$AGE months</title>
-	  <subtitle>Age</subtitle>
-	  <icon>icons/age.png</icon>
+	<subtitle>Age</subtitle>
+	<icon>gradient-icons/age.png</icon>
   </item>
 </items>
 EOB
