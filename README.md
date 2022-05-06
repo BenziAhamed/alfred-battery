@@ -1,10 +1,12 @@
 # Battery
 
-> For Apple M1 chip users: https://github.com/BenziAhamed/alfred-battery/issues/11#issue-812562822
-
 ![Logo](info.png)
 
 An Alfred workflow to display battery information of your Apple laptop.
+
+Is activated by the keyword "battery". The new gradient icon set is the default, but if
+you like the old set better, just use the optional keyword "reg", like thus: "battery reg"
+and it will revert to the old set.
 
 Gradient Icons:
 Thanks to their respective authors on FlatIcon. 
@@ -21,3 +23,4 @@ Clock icons created by redempticon
 Mouse icons created by Ilham Fitrotul Hayat
 Panel icons created by Pixel perfect
 Computer peripheral icons created by lakonicon
+Macbook icons created by bqlqn

@@ -1,6 +1,12 @@
-#1/usr/bin/env bash
+#!/bin/bash
 
 ioreg -l -n AppleSmartBattery -r > info.txt
+
+if [ "$1" = "reg" ]; then
+	ICON_SET="icons"
+else
+	ICON_SET="gradient-icons"
+fi
 
 RAW_CURRENT_CAPACITY=$(cat info.txt | grep -e \"AppleRawCurrentCapacity\" | awk '{printf ("%i", $3)}')
 RAW_MAX_CAPACITY=$(cat info.txt | grep -e \"AppleRawMaxCapacity\" | awk '{printf ("%i", $3)}')
@@ -28,13 +34,13 @@ fi
 
 TIME_INFO=n
 STATUS_INFO=Draining
-BATT_ICON="gradient-icons/draining.png"
+BATT_ICON="$ICON_SET/draining.png"
 
 if [ $CHARGING == Yes ]; then
 	TIME_FULL=$(cat info.txt | grep -e \"AvgTimeToFull\" | tr '\n' ' | ' | awk '{printf("%i:%.2i", $3/60, $3%60)}')
 	TIME_INFO=$(echo $TIME_FULL until full)
 	STATUS_INFO=Charging
-	BATT_ICON="gradient-icons/charging.png"
+	BATT_ICON="$ICON_SET/charging.png"
 else
 	FULLY_CHARGED=$(cat info.txt | grep -e \"FullyCharged\" | awk '{printf("%s",$3)}')
 	EXTERNAL=$(cat info.txt | grep -e \"ExternalConnected\" | awk '{printf("%s",$3)}')
@@ -42,20 +48,20 @@ else
 		if [ $EXTERNAL == Yes ]; then
 			TIME_INFO=$(echo On AC power)
 			STATUS_INFO=$(echo Fully Charged)
-			BATT_ICON="gradient-icons/power.png"
+			BATT_ICON="$ICON_SET/power.png"
 		else
 			TIME_INFO=$(echo $TIME_LEFT)
-			BATT_ICON="gradient-icons/full.png"
+			BATT_ICON="$ICON_SET/full.png"
 		fi
 	else
 		TIME_INFO=$(echo $TIME_LEFT)
-		BATT_ICON="gradient-icons/critical.png"
+		BATT_ICON="$ICON_SET/critical.png"
 		if [ $CHARGE -gt 80 ]; then
-			BATT_ICON="gradient-icons/full.png"
+			BATT_ICON="$ICON_SET/full.png"
 		elif [ $CHARGE -gt 50 ]; then
-			BATT_ICON="gradient-icons/medium.png"
+			BATT_ICON="$ICON_SET/medium.png"
 		elif [ $CHARGE -gt 10 ]; then
-			BATT_ICON="gradient-icons/low.png"
+			BATT_ICON="$ICON_SET/low.png"
 		fi
 	fi
 fi
@@ -69,7 +75,7 @@ let "day=(MANUFACTURE_DATE >> 32) & 0xFFFF"
 
 AGE=$(python3 -c "from datetime import date as D; d1=D.today(); d2=D($year, $month, $day); print ( (d1.year - d2.year)*12 + d1.month - d2.month )")
 
-TRACKPAD_ICON="gradient-icons/trackpad.png"
+TRACKPAD_ICON="$ICON_SET/trackpad.png"
 # trackpad
 TrackpadPercent=`ioreg -c AppleDeviceManagementHIDEventService | grep -se \"Magic Trackpad\" -A8 | grep -se \"BatteryPercent\" | sed 's/[a-z,A-Z, ,|,\",=]//g' | tail -1 | awk '{print $1}'`
 if [ ${#TrackpadPercent} = 0 ]
@@ -80,7 +86,7 @@ else
 	TrackpadTitle="$TrackpadPercent% $TrackpadSlug"
 fi
 
-MOUSE_ICON="gradient-icons/mouse.png"
+MOUSE_ICON="$ICON_SET/mouse.png"
 # mouse
 MousePercent=`ioreg -c AppleDeviceManagementHIDEventService | grep -se \"Magic Mouse\" -A8 | grep -se \"BatteryPercent\" | sed 's/[a-z,A-Z, ,|,\",=]//g' | tail -1 | awk '{print $1}'`
 if [ ${#MousePercent} = 0 ]
@@ -91,7 +97,7 @@ else
 	MouseTitle="$MousePercent% $MouseSlug"
 fi
 
-KEYBOARD_ICON="gradient-icons/keyboard.png"
+KEYBOARD_ICON="$ICON_SET/keyboard.png"
 # keyboard
 KeyboardPercent=`ioreg -c AppleDeviceManagementHIDEventService | grep -se \"Magic Keyboard\" -A8 | grep -se \"BatteryPercent\" | sed 's/[a-z,A-Z, ,|,\",=]//g' | tail -1 | awk '{print $1}'`
 if [ ${#KeyboardPercent} = 0 ]
@@ -113,22 +119,22 @@ cat << EOB
   <item>
     <title>$TIME_INFO</title>
 	  <subtitle>Time Left</subtitle>
-	  <icon>gradient-icons/clock.png</icon>
+	  <icon>$ICON_SET/clock.png</icon>
   </item>
   <item>
     <title>${TEMPERATURE} °C</title>
 	  <subtitle>Temperature</subtitle>
-	  <icon>gradient-icons/temp.png</icon>
+	  <icon>$ICON_SET/temp.png</icon>
   </item>
   <item>
     <title>$CYCLE_COUNT</title>
 	  <subtitle>Charge Cycles Completed</subtitle>
-	  <icon>gradient-icons/cycles.png</icon>
+	  <icon>$ICON_SET/cycles.png</icon>
   </item>
   <item>
     <title>$HEALTH%</title>
 	  <subtitle>Health</subtitle>
-	  <icon>gradient-icons/health.png</icon>
+	  <icon>$ICON_SET/health.png</icon>
   </item>
   <item>
     <title>$MouseTitle</title>
@@ -148,12 +154,12 @@ cat << EOB
   <item>
     <title>$SERIAL</title>
 	<subtitle>Serial</subtitle>
-	<icon>gradient-icons/serial.png</icon>
+	<icon>$ICON_SET/serial.png</icon>
   </item>
   <item>
     <title>$AGE months</title>
 	<subtitle>Age</subtitle>
-	<icon>gradient-icons/age.png</icon>
+	<icon>$ICON_SET/age.png</icon>
   </item>
 </items>
 EOB
