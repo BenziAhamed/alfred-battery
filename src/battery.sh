@@ -22,7 +22,7 @@ SERIAL="${SERIAL%\"}"
 
 HEALTH=$(echo $RAW_MAX_CAPACITY $DESIGN_CAPACITY | awk '{printf ("%i", $1/$2 * 100)}')
 CHARGE=$(echo $RAW_CURRENT_CAPACITY $RAW_MAX_CAPACITY | awk '{printf ("%i", $1/$2 * 100)}')
-CELLS=$(/usr/bin/python3 -c "f='●'*(int($CHARGE/10)) + '○'*(int(10-$CHARGE/10));print(f)")
+CELLS=$(/usr/bin/python3 -c "f='●'*(int($CHARGE/9)) + '○'*(int(10-$CHARGE/9));print(f)")
 
 CYCLE_COUNT=$(cat info.txt | grep -e '\"CycleCount\" =' | awk '{printf ("%i", $3)}')
 

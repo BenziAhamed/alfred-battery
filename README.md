@@ -24,3 +24,5 @@ Mouse icons created by Ilham Fitrotul Hayat
 Panel icons created by Pixel perfect
 Computer peripheral icons created by lakonicon
 Macbook icons created by bqlqn
+Scan icons created by Pause08
+Hospital icons created by bearicons
